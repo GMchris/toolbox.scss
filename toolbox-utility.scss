@@ -1,0 +1,91 @@
+// FLOW
+// Properties generally associated or used to alter the flow, position
+// and relationships between elements.
+
+.relative { position: relative; }
+.absolute { position: absolute; }
+.fixed { position: fixed; }
+
+.inline { display: inline; }
+@include tb-dash('.i-block') { display: inline-block; }
+.block { display: block; }
+.hidden { display: none; }
+
+.flex { display: flex; }
+.inline-flex { display: inline-flex; }
+.flex-column { flex-direction: column; }
+.flex-column-reverse { flex-direction: column-reverse; }
+.flex-row { flex-direction: row; }
+.flex-row-reverse { flex-direction: row-reverse; }
+
+@include tb-dash('.f-left') { float: left; }
+@include tb-dash('.f-right') { float: right; }
+
+.clear:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.centered {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@include tb-dash('.v-margin') { margin-left: initial; margin-right: initial; }
+@include tb-dash('.v-padding') { padding-left: initial; padding-right: initial; }
+@include tb-dash('.h-margin') { margin-top: initial; margin-bottom: initial; }
+@include tb-dash('.h-padding') { padding-bottom: initial; padding-bottom: initial; }
+
+// DIMENSIONS
+// Concrete numeric values, related to the dimensions of the box model.
+@include tb-range(padding, $tb-padding-iterator, $tb-padding-min, $tb-padding-max, px);
+@include tb-range(margin, $tb-margin-iterator, $tb-margin-min, $tb-margin-max, px);
+
+@include tb-dash('.full-w') { width: 100%; }
+@include tb-dash('.half-w') { width: 50%; }
+
+@include tb-dash('.full-h') { height: 100%; }
+@include tb-dash('.half-h') { height: 50%; }
+
+// TEXT
+// Helper classes text manipulation.
+@include tb-dash('.t-center') { text-align: center; }
+@include tb-dash('.t-left') { text-align: left; }
+@include tb-dash('.t-right') { text-align: right; }
+
+.underlined { text-decoration: underline; }
+.uppercase { text-transform: uppercase; }
+.lowercase { text-transform: lowercase; }
+.capitalize { text-transform: capitalize; }
+@include tb-dash('.line-through') { text-decoration: line-through; }
+
+// COLORS
+// Automatically generated color classes.
+@each $tb-color-group in $tb-colors {
+    @if length($tb-color-group) < 1 {
+      body { @include tb-error('Color groups need to consist of at least one element.'); }
+    } @else {
+      $tb-key: nth($tb-color-group, 1);
+      $tb-value: null;
+      @if length($tb-color-group) < 2 {
+        $tb-value: nth($tb-color-group, 1);
+      } @else {
+        $tb-value: nth($tb-color-group, 2);
+      }
+
+      @debug $tb-key;
+
+      @if $tb-background-color-classes {
+        .#{$tb-key}-background { background-color: $tb-value; }
+      }
+
+      @if $tb-text-color-classes {
+        .#{$tb-key}-text { color: $tb-value; }
+      }
+
+      @if $tb-border-color-classes {
+        .#{$tb-key}-borders { border-color: $tb-value; }
+      }
+    }
+}

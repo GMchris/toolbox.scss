@@ -1,0 +1,32 @@
+// CODE STYLE
+// Determines if generated class names should have dashes. (Ex. i-block vs iblock)
+$tb-dashed-names: true;
+// Should Toolbox errors be visualized on the page.
+$tb-visualize-errors: true;
+
+// MEDIA QUERIES
+// List breakpoint by using a keyword of choice and
+$tb-breakpoints: (large, 1235px) (medium, 1024px) (small, 768px) (mobile, 320px);
+// An extra offset for the media queries to ignore before switching between each other.
+$tb-breakpoint-offset: 0;
+
+// DIMENSIONS
+// Generates padding classes. (Ex. padding-10, padding-20, padding-30)
+$tb-padding-iterator: 10;
+$tb-padding-min: 10;
+$tb-padding-max: 50;
+// Generates margin classes. (Ex. margin-10, margin-20, margin-30)
+$tb-margin-iterator: 10;
+$tb-margin-min: 10;
+$tb-margin-max: 50;
+
+// COLORS
+// List colors in lists of one or two. If the second parameter is omitted,
+// the first will be used for both key and value. (('white', #ffffff), (black), ...).
+$tb-colors: ('white', #fff), ('black', #000);
+// Should `background-color` classes be generated. (Ex. .white-background { background-color: #ffffff} )
+$tb-background-color-classes: true;
+// Should `color` classes be generated. (Ex. .white-text { color: #ffffff} )
+$tb-text-color-classes: false;
+// Should `border-color` classes be generated. (Ex. .white-borders { border-color: #ffffff} )
+$tb-border-color-classes: false;

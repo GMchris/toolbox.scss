@@ -1,0 +1,143 @@
+.relative {
+  position: relative; }
+
+.absolute {
+  position: absolute; }
+
+.fixed {
+  position: fixed; }
+
+.inline {
+  display: inline; }
+
+.i-block {
+  display: inline-block; }
+
+.block {
+  display: block; }
+
+.hidden {
+  display: none; }
+
+.flex {
+  display: flex; }
+
+.inline-flex {
+  display: inline-flex; }
+
+.flex-column {
+  flex-direction: column; }
+
+.flex-column-reverse {
+  flex-direction: column-reverse; }
+
+.flex-row {
+  flex-direction: row; }
+
+.flex-row-reverse {
+  flex-direction: row-reverse; }
+
+.f-left {
+  float: left; }
+
+.f-right {
+  float: right; }
+
+.clear:after {
+  content: "";
+  display: block;
+  clear: both; }
+
+.centered {
+  margin-right: auto;
+  margin-left: auto; }
+
+.v-margin {
+  margin-left: initial;
+  margin-right: initial; }
+
+.v-padding {
+  padding-left: initial;
+  padding-right: initial; }
+
+.h-margin {
+  margin-top: initial;
+  margin-bottom: initial; }
+
+.h-padding {
+  padding-bottom: initial;
+  padding-bottom: initial; }
+
+.padding-10 {
+  padding: 10px; }
+
+.padding-20 {
+  padding: 20px; }
+
+.padding-30 {
+  padding: 30px; }
+
+.padding-40 {
+  padding: 40px; }
+
+.padding-50 {
+  padding: 50px; }
+
+.margin-10 {
+  margin: 10px; }
+
+.margin-20 {
+  margin: 20px; }
+
+.margin-30 {
+  margin: 30px; }
+
+.margin-40 {
+  margin: 40px; }
+
+.margin-50 {
+  margin: 50px; }
+
+.full-w {
+  width: 100%; }
+
+.half-w {
+  width: 50%; }
+
+.full-h {
+  height: 100%; }
+
+.half-h {
+  height: 50%; }
+
+.t-center {
+  text-align: center; }
+
+.t-left {
+  text-align: left; }
+
+.t-right {
+  text-align: right; }
+
+.underlined {
+  text-decoration: underline; }
+
+.uppercase {
+  text-transform: uppercase; }
+
+.lowercase {
+  text-transform: lowercase; }
+
+.capitalize {
+  text-transform: capitalize; }
+
+.line-through {
+  text-decoration: line-through; }
+
+.white-background {
+  background-color: #fff; }
+
+.black-background {
+  background-color: #000; }
+
+/*# sourceMappingURL=toolbox.css.map */
