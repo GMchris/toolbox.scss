@@ -1,13 +1,37 @@
 // Appends an error message before the element it's called on.
 @mixin tb-error($message) {
   @if $tb-visualize-errors {
-    &::before {
-      content: $message;
+    body::before {
+      content: '#{$message}';
       color: red;
+      background-color: white;
+      border-radius: 5px;
+      border: 2px solid red;
+      padding: 5px;
+      margin: 5px;
       font-size: 16px;
     }
   }
   @warn $message;
+}
+
+// Wraps the content in a namespace from the config.
+@mixin tb-under-namespace {
+  @if $tb-namespace {
+    #{$tb-namespace} {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+@mixin tb-map($list, $string) {
+  @each $item in $list {
+    @if nth($item, 1) {
+
+    }
+  }
 }
 
 // Removes dashes on classes if neccessary.
@@ -30,5 +54,28 @@
     #{$name} { #{$property}: #{$i}#{$units}; }
 
     $i: $i + $iterator;
+  }
+}
+
+// Used for creating @media rules for screen widths.
+@mixin breakpoint($key) {
+  $size: null;
+
+  @each $item in $tb-breakpoints {
+    @if nth($item, 1) == $key {
+      $size: nth($item, 2);
+    }
+  }
+
+  @if $size {
+    @media screen and (max-width: $size + $tb-breakpoint-offset) {
+    .content {
+      @content;
+      }
+    }
+  } @else {
+    .content {
+      @include tb-error('No breakpoint called '#{$key}' was detected in "$tb-breakpoints"');
+    }
   }
 }

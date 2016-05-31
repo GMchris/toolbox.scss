@@ -1,11 +1,13 @@
-// CODE STYLE
+// General
+// Wraps all Toolbox classes under a common namespace. (Ex. .namespace .class {})
+$tb-namespace: null;
 // Determines if generated class names should have dashes. (Ex. i-block vs iblock)
 $tb-dashed-names: true;
 // Should Toolbox errors be visualized on the page.
 $tb-visualize-errors: true;
 
 // MEDIA QUERIES
-// List breakpoint by using a keyword of choice and
+// List breakpoint by using a keyword of choice and a pixel width.
 $tb-breakpoints: (large, 1235px) (medium, 1024px) (small, 768px) (mobile, 320px);
 // An extra offset for the media queries to ignore before switching between each other.
 $tb-breakpoint-offset: 0;
@@ -19,6 +21,13 @@ $tb-padding-max: 50;
 $tb-margin-iterator: 10;
 $tb-margin-min: 10;
 $tb-margin-max: 50;
+
+// TEXT
+// List font sizes with a key and a numeric value. The number is equivalent to pixels in size.
+$tb-font-sizes: ('base', 16);
+// Font sizes will be in rem. Note that this sets the `font-size` on both html and body elements.
+// The default font size of the `body` element will equal the first font-size from `$tb-font-sizes`
+$tb-rem-friendly: true;
 
 // COLORS
 // List colors in lists of one or two. If the second parameter is omitted,

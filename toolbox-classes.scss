@@ -1,3 +1,4 @@
+@include tb-under-namespace() {
 // FLOW
 // Properties generally associated or used to alter the flow, position
 // and relationships between elements.
@@ -22,7 +23,7 @@
 @include tb-dash('.f-right') { float: right; }
 
 .clear:after {
-  content: "";
+  content: '';
   display: block;
   clear: both;
 }
@@ -44,27 +45,57 @@
 
 @include tb-dash('.full-w') { width: 100%; }
 @include tb-dash('.half-w') { width: 50%; }
+@include tb-dash('.third-w') { width: 33.33%; }
+@include tb-dash('.quarter-w') { width: 25%; }
 
 @include tb-dash('.full-h') { height: 100%; }
 @include tb-dash('.half-h') { height: 50%; }
+@include tb-dash('.third-h') { height: 33.33%; }
+@include tb-dash('.quarter-h') { height: 25%; }
 
 // TEXT
-// Helper classes text manipulation.
+// Helper classes for text bodies.
 @include tb-dash('.t-center') { text-align: center; }
 @include tb-dash('.t-left') { text-align: left; }
 @include tb-dash('.t-right') { text-align: right; }
+@include tb-dash('.t-middle') { vertical-align: middle; }
 
+.bold { text-weight: bold; }
 .underlined { text-decoration: underline; }
+@include tb-dash('.line-through') { text-decoration: line-through; }
 .uppercase { text-transform: uppercase; }
 .lowercase { text-transform: lowercase; }
 .capitalize { text-transform: capitalize; }
-@include tb-dash('.line-through') { text-decoration: line-through; }
+@include tb-dash('.small-caps') { text-variant: small-caps; }
+
+@if $tb-rem-friendly {
+  html { font-size: 62.5%; }
+  $first-font: nth($tb-font-sizes, 1);
+  @if $first-font and nth($first-font, 2) {
+    $value: nth($first-font, 2);
+    body { font-size: #{$value}px; font-size: #{$value / 10}rem; }
+  } @else {
+    @include tb-error('First pair from "$tb-font-sizes" is invalid.');
+  }
+}
+
+@each $size in $tb-font-sizes {
+  @if length($size) < 1 {
+    @include tb-error('Font groups need to consist of two elements. A key and a numeric value.');
+  } @else if length($size) < 2 {
+    @include tb-error('Missing value for font named "#{nth($size, 1)}"');
+  } @else {
+    $key: nth($size, 1);
+    $value: nth($size, 2);
+    .#{$key}-font { font-size: #{$value}px; font-size: #{$value / 10}rem; }
+  }
+}
 
 // COLORS
 // Automatically generated color classes.
 @each $tb-color-group in $tb-colors {
     @if length($tb-color-group) < 1 {
-      body { @include tb-error('Color groups need to consist of at least one element.'); }
+      @include tb-error('Color groups need to consist of at least one element at "$tb-colors".');
     } @else {
       $tb-key: nth($tb-color-group, 1);
       $tb-value: null;
@@ -88,4 +119,5 @@
         .#{$tb-key}-borders { border-color: $tb-value; }
       }
     }
+}
 }
