@@ -36,7 +36,7 @@
 @include tb-dash('.v-margin') { margin-left: initial; margin-right: initial; }
 @include tb-dash('.v-padding') { padding-left: initial; padding-right: initial; }
 @include tb-dash('.h-margin') { margin-top: initial; margin-bottom: initial; }
-@include tb-dash('.h-padding') { padding-bottom: initial; padding-bottom: initial; }
+@include tb-dash('.h-padding') { padding-top: initial; padding-bottom: initial; }
 
 // DIMENSIONS
 // Concrete numeric values, related to the dimensions of the box model.
@@ -75,7 +75,7 @@
     $value: nth($first-font, 2);
     body { font-size: #{$value}px; font-size: #{$value / 10}rem; }
   } @else {
-    @include tb-error('First pair from "$tb-font-sizes" is invalid.');
+    @include tb-error('First pair from "$tb-font-sizes" is invalid.')
   }
 }
 
@@ -104,8 +104,6 @@
       } @else {
         $tb-value: nth($tb-color-group, 2);
       }
-
-      @debug $tb-key;
 
       @if $tb-background-color-classes {
         .#{$tb-key}-background { background-color: $tb-value; }

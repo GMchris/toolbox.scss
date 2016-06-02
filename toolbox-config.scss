@@ -24,7 +24,7 @@ $tb-margin-max: 50;
 
 // TEXT
 // List font sizes with a key and a numeric value. The number is equivalent to pixels in size.
-$tb-font-sizes: ('base', 16);
+$tb-font-sizes: ('base', 16), ('small', 12);
 // Font sizes will be in rem. Note that this sets the `font-size` on both html and body elements.
 // The default font size of the `body` element will equal the first font-size from `$tb-font-sizes`
 $tb-rem-friendly: true;
