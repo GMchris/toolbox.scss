@@ -1,8 +1,221 @@
 // Toolbox.scss - simple and lightweight CSS library for writing fast and reusable CSS.
 // By Kristian Ignatov - https://github.com/GMchris
-//
 
 @import "toolbox-config";
-@import "toolbox-mixins";
-@import "toolbox-functions";
-@import "toolbox-classes";
+
+//----------------------------------------------------------------------------------------------------------------------
+// MIXINS AND FUNCTIONS
+//----------------------------------------------------------------------------------------------------------------------
+
+// Replaces instances of a string, inside a string with a third string.
+@function str-replace($string, $search, $replace: '') {
+  $index: str-index($string, $search);
+
+  @if $index {
+    @return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+  }
+
+  @return $string;
+}
+
+// Removes dashes on classes if necessary.
+@function toggle-dash($name) {
+  @if not $tb-dashed-names {
+    @return str-replace($name, '-');
+  }
+  @return $name;
+}
+
+// Selects the proper length class name.
+@function name-length($long, $short: null) {
+  @if $tb-short-names and $short {
+    @return $short;
+  }
+  @return $long;
+}
+
+// Appends an error message before the element it's called on.
+@mixin error($message) {
+  @if $tb-visualize-errors {
+    body::before {
+      content: '#{$message}';
+      color: red;
+      background-color: white;
+      border-radius: 5px;
+      border: 2px solid red;
+      padding: 5px;
+      margin: 5px;
+      font-size: 16px;
+    }
+  }
+  @warn $message;
+}
+
+// Wraps the content in a namespace from the config.
+@mixin namespace {
+  @if $tb-namespace {
+    #{$tb-namespace} {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+// Class naming.
+@mixin tb-class($long, $short: null) {
+  $name: null;
+  $name: name-length($long, $short);
+  $name: toggle-dash($name);
+
+  .#{$name} { @content; }
+}
+
+// Generates a range of classes, clamped between two values.
+@mixin tb-range($property, $iterator, $min, $max, $short, $units: '') {
+  @if $min > $max { @include error('Min value higher than max, while generating #{$name}.') }
+
+  $i: $min;
+
+  @while $i <= $max {
+    @include tb-class('#{$property}-#{$i}', '#{$short}-#{$i}') { #{$property}: #{$i}#{$units}; }
+
+    $i: $i + $iterator;
+  }
+}
+
+// Used for creating @media rules for screen widths.
+@mixin breakpoint($key) {
+  $size: null;
+
+  @if map-has-key($tb-breakpoints, $key) {
+    @media screen and (max-width:  map-get($tb-breakpoints, $key) + $tb-breakpoint-offset) {
+      @content;
+    }
+  } @else {
+    @include error('No breakpoint called '#{$key}' was detected in "$tb-breakpoints"');
+  }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+// CLASS DEFINITIONS
+//----------------------------------------------------------------------------------------------------------------------
+
+@include namespace {
+  // FLOW
+  // Properties generally associated or used to alter the flow, position
+  // and relationships between elements.
+
+  @include tb-class('relative', 'rel') { position: relative; }
+  @include tb-class('absolute', 'abs') { position: absolute; }
+  @include tb-class('fixed', 'fix') { position: fixed; }
+
+  @include tb-class('inline-block', 'in-bl') { display: inline-block; }
+  @include tb-class('inline', 'in') { display: inline; }
+  @include tb-class('block', 'bl') { display: block; }
+  @include tb-class('hidden', 'hide') { display: none; }
+
+  @include tb-class('flex', 'fl')  { display: flex; }
+  @include tb-class('inline-flex', 'in-fl') { display: inline-flex; }
+
+  @include tb-class('float-left', 'flo-l') { float: left; }
+  @include tb-class('float-right', 'flo-r') { float: right; }
+
+  @include tb-class('clear', 'cl') {
+    content: '';
+    display: block;
+    clear: both;
+  }
+
+  @include tb-class('centered', 'cen') {
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  @include tb-class('vertical-margin', 'v-mar') { margin-left: initial; margin-right: initial; }
+  @include tb-class('horizontal-margin', 'h-mar') { margin-top: initial; margin-bottom: initial; }
+  @include tb-class('vertical-padding', 'v-pad') { padding-left: initial; padding-right: initial; }
+  @include tb-class('horizontal-padding', 'h-pad') { padding-top: initial; padding-bottom: initial; }
+
+  // DIMENSIONS
+  // Concrete numeric values, related to the dimensions of the box model.
+  @include tb-range(padding, $tb-padding-iterator, $tb-padding-min, $tb-padding-max,  'pad', px);
+  @include tb-range(margin, $tb-margin-iterator, $tb-margin-min, $tb-margin-max, 'mar', px);
+
+  @include tb-class('full-width', 'f-wi') { width: 100%; }
+  @include tb-class('half-width', 'h-wi') { width: 50%; }
+  @include tb-class('third-width', 't-wi') { width: 33.33%; }
+  @include tb-class('quarter-width', 'q-wi') { width: 25%; }
+
+  @include tb-class('full-height', 'f-he') { height: 100%; }
+  @include tb-class('half-height', 'f-he') { height: 50%; }
+  @include tb-class('third-height', 't-he') { height: 33.33%; }
+  @include tb-class('quarter-height', 'q-he') { height: 25%; }
+
+  // TEXT
+  // Helper classes for text bodies.
+  @include tb-class('text-center', 't-cen') { text-align: center; }
+  @include tb-class('text-left', 't-le') { text-align: left; }
+  @include tb-class('text-right', 't-ri') { text-align: right; }
+  @include tb-class('text-middle', 't-mid') { vertical-align: middle; }
+
+  @include tb-class('bold', 'b') { font-weight: bold; }
+  @include tb-class('italic', 'i') { font-style: italic; }
+  @include tb-class('underlined', 'un') { text-decoration: underline; }
+  @include tb-class('line-through', 'li-t') { text-decoration: line-through; }
+  @include tb-class('uppercase', 'up-c') { text-transform: uppercase; }
+  @include tb-class('lowercase', 'lw-c') { text-transform: lowercase; }
+  @include tb-class('capitalize', 'cap')  { text-transform: capitalize; }
+  @include tb-class('small-caps', 'sm-cap') { text-variant: small-caps; }
+
+  @if $tb-rem-friendly {
+    html { font-size: 62.5%; }
+    $first-font: nth($tb-font-sizes, 1);
+    @if $first-font and nth($first-font, 2) {
+      $value: nth($first-font, 2);
+      body { font-size: #{$value}px; font-size: #{$value / 10}rem; }
+    } @else {
+      @include error('First pair from "$tb-font-sizes" is invalid.')
+    }
+  }
+
+  @each $size in $tb-font-sizes {
+    @if length($size) < 1 {
+      @include error('Font groups need to consist of two elements. A key and a numeric value.');
+    } @else if length($size) < 2 {
+      @include error('Missing value for font named "#{nth($size, 1)}"');
+    } @else {
+      $key: nth($size, 1);
+      $value: nth($size, 2);
+      @include tb-class('#{$key}-font', '#{$key}-f') { font-size: #{$value}px; font-size: #{$value / 10}rem; }
+    }
+  }
+
+  // COLORS
+  // Automatically generated color classes.
+  @each $tb-color-group in $tb-colors {
+    @if length($tb-color-group) < 1 {
+      @include error('Color groups need to consist of at least one element at "$tb-colors".');
+    } @else {
+      $tb-key: nth($tb-color-group, 1);
+      $tb-value: null;
+      @if length($tb-color-group) < 2 {
+        $tb-value: nth($tb-color-group, 1);
+      } @else {
+        $tb-value: nth($tb-color-group, 2);
+      }
+
+      @if $tb-background-color-classes {
+        @include tb-class('#{$tb-key}-background', '#{$tb-key}-bg') { background-color: $tb-value; }
+      }
+
+      @if $tb-text-color-classes {
+        @include tb-class('#{$tb-key}-text', '#{tb-key}-t') { color: $tb-value; }
+      }
+
+      @if $tb-border-color-classes {
+        @include tb-class('#{$tb-key}-borders', '#{tb-key}-b') { border-color: $tb-value; }
+      }
+    }
+  }
+}

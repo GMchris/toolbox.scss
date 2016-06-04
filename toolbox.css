@@ -7,11 +7,11 @@
 .fixed {
   position: fixed; }
 
+.inline-block {
+  display: inline-block; }
+
 .inline {
   display: inline; }
-
-.i-block {
-  display: inline-block; }
 
 .block {
   display: block; }
@@ -25,25 +25,13 @@
 .inline-flex {
   display: inline-flex; }
 
-.flex-column {
-  flex-direction: column; }
-
-.flex-column-reverse {
-  flex-direction: column-reverse; }
-
-.flex-row {
-  flex-direction: row; }
-
-.flex-row-reverse {
-  flex-direction: row-reverse; }
-
-.f-left {
+.float-left {
   float: left; }
 
-.f-right {
+.float-right {
   float: right; }
 
-.clear:after {
+.clear {
   content: '';
   display: block;
   clear: both; }
@@ -52,19 +40,19 @@
   margin-right: auto;
   margin-left: auto; }
 
-.v-margin {
+.vertical-margin {
   margin-left: initial;
   margin-right: initial; }
 
-.v-padding {
-  padding-left: initial;
-  padding-right: initial; }
-
-.h-margin {
+.horizontal-margin {
   margin-top: initial;
   margin-bottom: initial; }
 
-.h-padding {
+.vertical-padding {
+  padding-left: initial;
+  padding-right: initial; }
+
+.horizontal-padding {
   padding-top: initial;
   padding-bottom: initial; }
 
@@ -98,44 +86,47 @@
 .margin-50 {
   margin: 50px; }
 
-.full-w {
+.full-width {
   width: 100%; }
 
-.half-w {
+.half-width {
   width: 50%; }
 
-.third-w {
+.third-width {
   width: 33.33%; }
 
-.quarter-w {
+.quarter-width {
   width: 25%; }
 
-.full-h {
+.full-height {
   height: 100%; }
 
-.half-h {
+.half-height {
   height: 50%; }
 
-.third-h {
+.third-height {
   height: 33.33%; }
 
-.quarter-h {
+.quarter-height {
   height: 25%; }
 
-.t-center {
+.text-center {
   text-align: center; }
 
-.t-left {
+.text-left {
   text-align: left; }
 
-.t-right {
+.text-right {
   text-align: right; }
 
-.t-middle {
+.text-middle {
   vertical-align: middle; }
 
 .bold {
-  text-weight: bold; }
+  font-weight: bold; }
+
+.italic {
+  font-style: italic; }
 
 .underlined {
   text-decoration: underline; }
@@ -173,7 +164,13 @@ body {
 .white-background {
   background-color: #fff; }
 
+.white-text {
+  color: #fff; }
+
 .black-background {
   background-color: #000; }
+
+.black-text {
+  color: #000; }
 
 /*# sourceMappingURL=toolbox.css.map */
