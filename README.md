@@ -1,18 +1,26 @@
 # toolbox.scss
 
-`toolbox.scss` provides a number of utility classes, mixins and functions. It's an unopinionated library
+`toolbox.scss` provides a number of utility classes and mixins. It's an unopinionated library
 meant to save you time when starting new projects, and is best used in conjunction with another CSS framework
 or writing methodology.
 
 ## How do I get it?
 
-Just download and include `toolbox.scss` and `toolbox-config.scss` in your project. Modify the config to your liking,
+If you're using npm:
+
+`npm install toolbox-css`
+
+Then include the `toolbox.scss` file from within the `node-modules` directory. Don't forget to edit the `toolbox-config`
+file for your needs. Its in the same directory.
+
+Otherwise download and include `toolbox.scss` and `toolbox-config.scss` in your project. Modify the config to your liking,
 by following the information in the comments or in the guide below. If you're not using Sass, just download `toolbox.css` -
 a CSS compiled version of the library using default settings. It should be fine for most projects.
 
 ## Toolbox does
 
-- Offer many common utility classes, mixins and functions.
+- Offer many common utility classes.
+- Solve media related issues.
 - Promote simple selectors and performant CSS.
 
 ## Toolbox doesn't
@@ -29,7 +37,7 @@ I've seen people try to just use whatever they have available to style very nest
 solution I've found is using simple utility methods for common properties and values, but it's tedious to write all
 of them, every time you begin a new project, and here are we.
 
-`toolbox` provides some of the most common properties and values, described with sane names, and mixins and functions that
+`toolbox` provides some of the most common properties and values, described with sane names, and mixins that
 work in unison with a config file to suit every project's need.
 
 ## The config file
@@ -82,30 +90,10 @@ their functionality, however let's go over them in more detail here.
 `text-color-classes` | `true`, `false` | `false` | Whether to generate color classes for `color`. For instance `.white-text { color: #fff; }`.
 `border-color-classes` | `true`, `false` | `false` | Whether to generate color classes for `border-color`. For instance `.white-borders { border-color: #fff; }`.
 
-## Mixins and functions
-
-The library comes packaged with several mixins and functions. Some are strictly for internal usage (as they use config variables),
-while others are used in the library or in conjunction with it, but can be usually used externally
-by your program.
-
-#### *Functions*
-
-`str-replace(stringToSearch, searchQuery, replaceWith: '')` - Recursively replaces all instances of a substring in a string.
-If the optional, third parameter is not passed, all instances will be replaced by an emtry string(`''`).
-
-#### *Mixins*
-
-`error(message)` - Logs a warning in the terminal which compiles Sass, and if `$tb-visualize-errors` is set to true,
-prepends an error message to the `body` element via the `::before` pseudoclass.
-
-`namespace() { //content }` - Wraps all given content under a namespace, if one is set under `$tb-namespace`.
-
-`tb-class(name, shortName: null) { //content }` - Used for declaring all `toolbox` classes. If you define your classes
-using this mixin, they will pass through all transformative operations such a removing dashes.
-
 ## Classes
 
-Finally, and most importantly - all classes featured in `toolbox`.
+The classes are all generated through a Sass compiler, based on the settings in your config. While some have static names,
+others are more dynamic and flexible, usually using keywords or even numeric values, denoted below with `#`.
 
 **Name** | **Short** | **Styles**
 --- | --- | --- | ---
@@ -128,3 +116,43 @@ Finally, and most importantly - all classes featured in `toolbox`.
 .horizontal-padding | .h-pad | padding-top: initial; padding-bottom: initial;
 .#-padding | .#-pad | padding: #px;
 .#-margin | .#-mar | margin: #px;
+.full-width | .f-wi | width: 100%;
+.half-width | .h-wi | width: 50%;
+.third-width | .t-wi | width: 33.33%;
+.quarter-width | .q-wi | width: 25%;
+.full-height | .f-he | height: 100%;
+.half-height| .h-he | height: 50%;
+.third-height | .t-he | height: 33.33%;
+.quarter-height | .q-he | height: 25%;
+.text-center | .t-cen | text-align: center;
+.text-left | .t-le | text-align: left;
+.text-right | .t-ri | text-align: right;
+.text-middle | .t-mid | vertical-align: middle;
+.bold | .b | font-weight: bold;
+.italic | .i | font-style: italic;
+.underlined | .un | text-decoration: underlined;
+.line-through | .li-t | text-decoration: line-through;
+.uppercase | .up | text-transform: uppercase;
+.lowercase | .low | text-transform: lowercase;
+.capitalize | .cap | text-transform: capitalize;
+.small-caps | .sm-cap | text-variant: small-caps;
+.#-font | .#-f | font-size: #px; font-size: #rem;
+.#-background | .#-bg | background-color: #;
+.#-text | .#-t | color: #;
+.#-borders | .#-b | border-color: #;
+.#-hide | .#-h | display: none;
+.#-show | .#-s | display: none;
+
+When working on responsiveness, you can use the `breakpoint`, `below` and `above` mixins, by passing the first a keyword
+from the `$tb-breakpoints` list, and the other two a pixel width they should apply styles to. Additionally they take
+a `@content` block, which are the styles they'll apply. For instance:
+
+`@include breakpoint(small) {
+  .element-to-modify-on-small-screens {
+    background-color: red;
+  }
+}`
+
+You also have the, listed above, media classes, ending in `-show` and `-hidden`. These classes
+will be generated for each element in your breakpoints list, and when added to an element will either show or hide it based
+on the screen width.

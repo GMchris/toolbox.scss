@@ -8,26 +8,26 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 // Replaces instances of a string, inside a string with a third string.
-@function str-replace($string, $search, $replace: '') {
+@function tb-str-replace($string, $search, $replace: '') {
   $index: str-index($string, $search);
 
   @if $index {
-    @return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+    @return str-slice($string, 1, $index - 1) + $replace + tb-str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
   }
 
   @return $string;
 }
 
 // Removes dashes on classes if necessary.
-@function toggle-dash($name) {
+@function tb-toggle-dash($name) {
   @if not $tb-dashed-names {
-    @return str-replace($name, '-');
+    @return tb-str-replace($name, '-');
   }
   @return $name;
 }
 
 // Selects the proper length class name.
-@function name-length($long, $short: null) {
+@function tb-name-length($long, $short: null) {
   @if $tb-short-names and $short {
     @return $short;
   }
@@ -35,7 +35,7 @@
 }
 
 // Appends an error message before the element it's called on.
-@mixin error($message) {
+@mixin tb-error($message) {
   @if $tb-visualize-errors {
     body::before {
       content: '#{$message}';
@@ -52,7 +52,7 @@
 }
 
 // Wraps the content in a namespace from the config.
-@mixin namespace {
+@mixin tb-namespace {
   @if $tb-namespace {
     #{$tb-namespace} {
       @content;
@@ -65,15 +65,15 @@
 // Class naming.
 @mixin tb-class($long, $short: null) {
   $name: null;
-  $name: name-length($long, $short);
-  $name: toggle-dash($name);
+  $name: tb-name-length($long, $short);
+  $name: tb-toggle-dash($name);
 
   .#{$name} { @content; }
 }
 
 // Generates a range of classes, clamped between two values.
 @mixin tb-range($property, $iterator, $min, $max, $short, $units: '') {
-  @if $min > $max { @include error('Min value higher than max, while generating #{$name}.') }
+  @if $min > $max { @include tb-error('Min value higher than max, while generating #{$name}.') }
 
   $i: $min;
 
@@ -88,12 +88,34 @@
 @mixin breakpoint($key) {
   $size: null;
 
-  @if map-has-key($tb-breakpoints, $key) {
-    @media screen and (max-width:  map-get($tb-breakpoints, $key) + $tb-breakpoint-offset) {
-      @content;
+  @each $item in $tb-breakpoints {
+    @if nth($item, 1) == $key {
+      $size: nth($item, 2);
+    }
+  }
+
+  @if $size {
+    @media screen and (max-width: $size + $tb-breakpoint-offset) {
+      .content {
+        @content;
+      }
     }
   } @else {
-    @include error('No breakpoint called '#{$key}' was detected in "$tb-breakpoints"');
+    .content {
+      @include tb-error("No breakpoint called '#{$key}' was detected. Make sure it's included in your config file.");
+    }
+  }
+}
+
+@mixin below($size) {
+  @media screen and (max-width: $size + $tb-breakpoint-offset) {
+    @content;
+  }
+}
+
+@mixin above($size) {
+  @media screen and (min-width: $size - $tb-breakpoint-offset) {
+    @content;
   }
 }
 
@@ -101,7 +123,7 @@
 // CLASS DEFINITIONS
 //----------------------------------------------------------------------------------------------------------------------
 
-@include namespace {
+@include tb-namespace {
   // FLOW
   // Properties generally associated or used to alter the flow, position
   // and relationships between elements.
@@ -163,11 +185,13 @@
   @include tb-class('italic', 'i') { font-style: italic; }
   @include tb-class('underlined', 'un') { text-decoration: underline; }
   @include tb-class('line-through', 'li-t') { text-decoration: line-through; }
-  @include tb-class('uppercase', 'up-c') { text-transform: uppercase; }
-  @include tb-class('lowercase', 'lw-c') { text-transform: lowercase; }
+  @include tb-class('uppercase', 'up') { text-transform: uppercase; }
+  @include tb-class('lowercase', 'low') { text-transform: lowercase; }
   @include tb-class('capitalize', 'cap')  { text-transform: capitalize; }
   @include tb-class('small-caps', 'sm-cap') { text-variant: small-caps; }
 
+
+  // Rem settings
   @if $tb-rem-friendly {
     html { font-size: 62.5%; }
     $first-font: nth($tb-font-sizes, 1);
@@ -175,15 +199,16 @@
       $value: nth($first-font, 2);
       body { font-size: #{$value}px; font-size: #{$value / 10}rem; }
     } @else {
-      @include error('First pair from "$tb-font-sizes" is invalid.')
+      @include tb-error('First pair from "$tb-font-sizes" is invalid.')
     }
   }
 
+  // Fonts
   @each $size in $tb-font-sizes {
     @if length($size) < 1 {
-      @include error('Font groups need to consist of two elements. A key and a numeric value.');
+      @include tb-error('Font groups need to consist of two elements. A key and a numeric value.');
     } @else if length($size) < 2 {
-      @include error('Missing value for font named "#{nth($size, 1)}"');
+      @include tb-error('Missing value for font named "#{nth($size, 1)}"');
     } @else {
       $key: nth($size, 1);
       $value: nth($size, 2);
@@ -195,7 +220,7 @@
   // Automatically generated color classes.
   @each $tb-color-group in $tb-colors {
     @if length($tb-color-group) < 1 {
-      @include error('Color groups need to consist of at least one element at "$tb-colors".');
+      @include tb-error('Color groups need to consist of at least one element at "$tb-colors".');
     } @else {
       $tb-key: nth($tb-color-group, 1);
       $tb-value: null;
@@ -216,6 +241,24 @@
       @if $tb-border-color-classes {
         @include tb-class('#{$tb-key}-borders', '#{tb-key}-b') { border-color: $tb-value; }
       }
+    }
+  }
+}
+
+// Media query states.
+@each $dim in $tb-breakpoints {
+  @if length($dim) < 2 {
+    @include tb-error('Breakpoint is invalid. It should include both a name and a value.')
+  } @else {
+    $key: nth($dim, 1);
+    $val: nth($dim, 2);
+
+    @include below($val) {
+      @include tb-class('#{$key}-hide', '#{$key}-h') { display: none; }
+    }
+
+    @include above($val) {
+      @include tb-class('#{$key}-show', #{$key}-s) { display: none; }
     }
   }
 }

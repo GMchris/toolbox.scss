@@ -1,4 +1,4 @@
-// General
+// GENERAL
 // Wraps all Toolbox classes under a common namespace. (Ex. .namespace .class {})
 $tb-namespace: null;
 // Whether class names should be abbreviated. (Ex. absolute vs abs)
@@ -10,7 +10,7 @@ $tb-visualize-errors: true;
 
 // MEDIA QUERIES
 // List breakpoint by using a keyword of choice and a pixel width.
-$tb-breakpoints: (large: 1235px, medium: 1024px, small: 768px, mobile: 320px);
+$tb-breakpoints: (large, 1235px), (medium, 1024px), (small, 768px), (mobile, 320px);
 // An extra offset for the media queries to ignore before switching between each other.
 $tb-breakpoint-offset: 0;
 

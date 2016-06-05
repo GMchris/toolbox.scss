@@ -1,0 +1,24 @@
+{
+  "name": "toolbox-css",
+  "version": "0.1.0",
+  "description": "A utility library for developing performant web apps",
+  "main": "toolbox.scss",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GMchris/toolbox.scss.git"
+  },
+  "keywords": [
+    "scss",
+    "sass",
+    "css"
+  ],
+  "author": "Kristian Ignatov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GMchris/toolbox.scss/issues"
+  },
+  "homepage": "https://github.com/GMchris/toolbox.scss#readme"
+}
