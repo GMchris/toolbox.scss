@@ -96,14 +96,10 @@
 
   @if $size {
     @media screen and (max-width: $size + $tb-breakpoint-offset) {
-      .content {
-        @content;
-      }
+      @content;
     }
   } @else {
-    .content {
-      @include tb-error("No breakpoint called '#{$key}' was detected. Make sure it's included in your config file.");
-    }
+    @include tb-error("No breakpoint called '#{$key}' was detected. Make sure it's included in your config file.");
   }
 }
 
