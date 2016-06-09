@@ -1,6 +1,10 @@
 // GENERAL
 // Wraps all Toolbox classes under a common namespace. (Ex. .namespace .class {})
 $tb-namespace: null;
+// A prefix to prepend to class names. (Ex. .pre-relative vs .relative)
+$tb-prefix: null;
+// A suffix to append to class names. (Ex. .relative-suf vs .relative)
+$tb-suffix: null;
 // Whether class names should be abbreviated. (Ex. absolute vs abs)
 $tb-short-names: false;
 // Determines if generated class names should have dashes. (Ex. i-block vs iblock)
