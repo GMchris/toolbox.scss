@@ -1,6 +1,6 @@
 {
   "name": "toolbox-css",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "A utility library for developing performant web apps",
   "main": "toolbox.scss",
   "scripts": {
