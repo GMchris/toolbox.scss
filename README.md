@@ -8,7 +8,7 @@ or writing methodology.
 
 If you're using npm:
 
-`npm install toolbox-css`
+  `npm install toolbox-css`
 
 Then include the `toolbox.scss` file from within the `node-modules` directory. Don't forget to edit the `toolbox-config`
 file for your needs. Its in the same directory.
@@ -20,7 +20,7 @@ a CSS compiled version of the library using default settings. It should be fine 
 ## Toolbox does
 
 - Offer many common utility classes.
-- Solve media related issues.
+- Simplify responsive design.
 - Promote simple selectors and performant CSS.
 
 ## Toolbox doesn't
@@ -53,7 +53,9 @@ their functionality, however let's go over them in more detail here.
 --- | --- | --- | ---
 `namespace` | Any valid selector or `null` | `null` | A namespace to apply to all classes from the library.
 `short-names` | `true`, `false` | `false` | Whether the class names should use their short variant. For example `.absolute` or `.abs`.
-`dashed-names` | `true`, `false` |  `true` | Whether to include the `-` character in class names. For instance `.float-left` or `.floatleft`.
+`dashed-names` | `true`, `false` |  `true` | Whether to include the `-` character in class names. For example `.float-left` or `.floatleft`.
+`prefix` | `null` or `string` | `null` | A prefix to prepend to all class names. For example `.pre-relative`.
+`suffix` | `null` or `string` | `null` | A suffix to append to all class names. For example `.relative-suf`.
 `visualize-errors` | `true`, `false` | `true` | Whether to show `toolbox` errors as a pseudo element in the HTML or not.
 
 #### **Media queries**
@@ -93,23 +95,39 @@ their functionality, however let's go over them in more detail here.
 ## Classes
 
 The classes are all generated through a Sass compiler, based on the settings in your config. While some have static names,
-others are more dynamic and flexible, usually using keywords or even numeric values, denoted below with `#`.
+others are more dynamic, usually using keywords or even numeric values, denoted below with `#`. If you want to define your
+own class, which will be treated with the same manipulations from the config file, use the `class` mixin like so:
+
+  `@include class('long-name', 'short-name'(optional))`
+  
+If you've set a string for the `$tb-namespace` variable in the config, you can use the `namespace` mixin, which will wrap all
+it's `@content` in the passes selector string. This is particularly useful when the code you want to namespace is spread out
+through several files, as changing the namespace becomes much easier and less error prone.
+
+As for the full list of classes and their properties, they are as follows:
 
 **Name** | **Short** | **Styles**
 --- | --- | --- | ---
+.static | .sta | position: static;
 .relative | .rel | position: relative;
 .absolute | .abs | position: absolute;
 .fixed | .fix | position: fixed;
 .inline-block | .in-bl | display: inline-block;
 .inline | .in | display: inline;
 .block | .bl | display: block;
+.table | .tb | display: table;
+.table-row | .tr | display: table-row;
+.table-cell | .td | display: table-cell;
 .hidden| .hide | display: none;
 .flex| .fl | display: flex;
 .inline-flex | .in-fl | display: inline-flex;
 .float-left | .flo-l | float: left;
 .float-right | .flo-r | float: right;
+.flip-horizontal | .f-h | transform: scaleX(-1); filter: FlipH;
+.flip-vertical | .f-v | transform: scaleY(-1); filter: FlipV;
 .clear | .cl | content: ''; display: block; clear: both;
 .centered | .cen | margin-right: auto; margin-left: auto;
+.border-box | .b-bo | box-sizing: border-box;
 .vertical-margin | .v-mar | margin-left: initial; margin-right: initial;
 .horizontal-margin | .h-mar | margin-top: initial; margin-bottom: initial;
 .vertical-padding | .v-pad | padding-left: initial; padding-right: initial;
@@ -143,9 +161,11 @@ others are more dynamic and flexible, usually using keywords or even numeric val
 .#-hide | .#-h | display: none;
 .#-show | .#-s | display: none;
 
-When working on responsiveness, you can use the `breakpoint`, `below` and `above` mixins, by passing the first a keyword
+### Breakpoints
+
+When working on responsive design, you can use the `breakpoint`, `below` and `above` mixins, by passing the first a keyword
 from the `$tb-breakpoints` list, and the other two a pixel width they should apply styles to. Additionally they take
-a `@content` block, which are the styles they'll apply. For instance:
+a `@content` block, which are the rules they'll apply. For instance:
 
 `@include breakpoint(small) {
   .element-to-modify-on-small-screens {
@@ -153,6 +173,6 @@ a `@content` block, which are the styles they'll apply. For instance:
   }
 }`
 
-You also have the, listed above, media classes, ending in `-show` and `-hidden`. These classes
+You also have the listed above media classes, ending in `-show` and `-hidden`. These classes
 will be generated for each element in your breakpoints list, and when added to an element will either show or hide it based
 on the screen width.

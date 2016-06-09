@@ -7,6 +7,18 @@
 // MIXINS AND FUNCTIONS
 //----------------------------------------------------------------------------------------------------------------------
 
+// Class naming.
+@mixin class($long, $short: null) {
+  $name: null;
+  $name: tb-name-length($long, $short);
+  $name: tb-toggle-dash($name);
+
+  @if ($tb-prefix) {$name: #{$tb-prefix}-#{$name};}
+  @if ($tb-suffix) {$name: #{$name}-#{$tb-suffix};}
+
+  .#{$name} { @content; }
+}
+
 // Replaces instances of a string, inside a string with a third string.
 @function tb-str-replace($string, $search, $replace: '') {
   $index: str-index($string, $search);
@@ -52,7 +64,7 @@
 }
 
 // Wraps the content in a namespace from the config.
-@mixin tb-namespace {
+@mixin namespace {
   @if $tb-namespace {
     #{$tb-namespace} {
       @content;
@@ -62,15 +74,6 @@
   }
 }
 
-// Class naming.
-@mixin tb-class($long, $short: null) {
-  $name: null;
-  $name: tb-name-length($long, $short);
-  $name: tb-toggle-dash($name);
-
-  .#{$name} { @content; }
-}
-
 // Generates a range of classes, clamped between two values.
 @mixin tb-range($property, $iterator, $min, $max, $short, $units: '') {
   @if $min > $max { @include tb-error('Min value higher than max, while generating #{$name}.') }
@@ -78,7 +81,7 @@
   $i: $min;
 
   @while $i <= $max {
-    @include tb-class('#{$property}-#{$i}', '#{$short}-#{$i}') { #{$property}: #{$i}#{$units}; }
+    @include class('#{$property}-#{$i}', '#{$short}-#{$i}') { #{$property}: #{$i}#{$units}; }
 
     $i: $i + $iterator;
   }
@@ -114,7 +117,7 @@
 }
 
 @mixin above($size) {
-  @media screen and (min-width: $size - $tb-breakpoint-offset) {
+  @media screen and (min-width: $size + $tb-breakpoint-offset) {
     @content;
   }
 }
@@ -123,75 +126,80 @@
 // CLASS DEFINITIONS
 //----------------------------------------------------------------------------------------------------------------------
 
-@include tb-namespace {
+@include namespace {
   // FLOW
   // Properties generally associated or used to alter the flow, position
   // and relationships between elements.
 
-  @include tb-class('relative', 'rel') { position: relative; }
-  @include tb-class('absolute', 'abs') { position: absolute; }
-  @include tb-class('fixed', 'fix') { position: fixed; }
+  @include class('static', 'sta') { position: static; }
+  @include class('relative', 'rel') { position: relative; }
+  @include class('absolute', 'abs') { position: absolute; }
+  @include class('fixed', 'fix') { position: fixed; }
 
-  @include tb-class('inline-block', 'in-bl') { display: inline-block; }
-  @include tb-class('inline', 'in') { display: inline; }
-  @include tb-class('block', 'bl') { display: block; }
-  @include tb-class('hidden', 'hide') { display: none; }
+  @include class('inline-block', 'in-bl') { display: inline-block; }
+  @include class('inline', 'in') { display: inline; }
+  @include class('block', 'bl') { display: block; }
+  @include class('table', 'tb') { display: table; }
+  @include class('table-row', 'tr') { display: table-row; }
+  @include class('table-cell', 'tdgi') { display: table-cell; }
+  @include class('hidden', 'hide') { display: none; }
 
-  @include tb-class('flex', 'fl')  { display: flex; }
-  @include tb-class('inline-flex', 'in-fl') { display: inline-flex; }
+  @include class('flex', 'fl')  { display: flex; }
+  @include class('inline-flex', 'in-fl') { display: inline-flex; }
 
-  @include tb-class('float-left', 'flo-l') { float: left; }
-  @include tb-class('float-right', 'flo-r') { float: right; }
+  @include class('float-left', 'flo-l') { float: left; }
+  @include class('float-right', 'flo-r') { float: right; }
 
-  @include tb-class('clear', 'cl') {
+  @include class('flip-horizontal', 'f-h') { transform: scaleX(-1); filter: FlipH; }
+  @include class('flip-vertical', 'f-v') { transform: scaleY(-1); filter: FlipV; }
+
+  @include class('clear', 'cl') {
     content: '';
     display: block;
     clear: both;
   }
 
-  @include tb-class('centered', 'cen') {
+  @include class('centered', 'cen') {
     margin-right: auto;
     margin-left: auto;
   }
 
-  @include tb-class('vertical-margin', 'v-mar') { margin-left: initial; margin-right: initial; }
-  @include tb-class('horizontal-margin', 'h-mar') { margin-top: initial; margin-bottom: initial; }
-  @include tb-class('vertical-padding', 'v-pad') { padding-left: initial; padding-right: initial; }
-  @include tb-class('horizontal-padding', 'h-pad') { padding-top: initial; padding-bottom: initial; }
+  @include class('vertical-margin', 'v-mar') { margin-left: initial; margin-right: initial; }
+  @include class('horizontal-margin', 'h-mar') { margin-top: initial; margin-bottom: initial; }
+  @include class('vertical-padding', 'v-pad') { padding-left: initial; padding-right: initial; }
+  @include class('horizontal-padding', 'h-pad') { padding-top: initial; padding-bottom: initial; }
 
   // DIMENSIONS
-  // Concrete numeric values, related to the dimensions of the box model.
+  @include class('border-box', 'b-bo') { box-sizing: border-box; }
+
   @include tb-range(padding, $tb-padding-iterator, $tb-padding-min, $tb-padding-max,  'pad', px);
   @include tb-range(margin, $tb-margin-iterator, $tb-margin-min, $tb-margin-max, 'mar', px);
 
-  @include tb-class('full-width', 'f-wi') { width: 100%; }
-  @include tb-class('half-width', 'h-wi') { width: 50%; }
-  @include tb-class('third-width', 't-wi') { width: 33.33%; }
-  @include tb-class('quarter-width', 'q-wi') { width: 25%; }
+  @include class('full-width', 'f-wi') { width: 100%; }
+  @include class('half-width', 'h-wi') { width: 50%; }
+  @include class('third-width', 't-wi') { width: 33.33%; }
+  @include class('quarter-width', 'q-wi') { width: 25%; }
 
-  @include tb-class('full-height', 'f-he') { height: 100%; }
-  @include tb-class('half-height', 'f-he') { height: 50%; }
-  @include tb-class('third-height', 't-he') { height: 33.33%; }
-  @include tb-class('quarter-height', 'q-he') { height: 25%; }
+  @include class('full-height', 'f-he') { height: 100%; }
+  @include class('half-height', 'f-he') { height: 50%; }
+  @include class('third-height', 't-he') { height: 33.33%; }
+  @include class('quarter-height', 'q-he') { height: 25%; }
 
   // TEXT
-  // Helper classes for text bodies.
-  @include tb-class('text-center', 't-cen') { text-align: center; }
-  @include tb-class('text-left', 't-le') { text-align: left; }
-  @include tb-class('text-right', 't-ri') { text-align: right; }
-  @include tb-class('text-middle', 't-mid') { vertical-align: middle; }
+  @include class('text-center', 't-cen') { text-align: center; }
+  @include class('text-left', 't-le') { text-align: left; }
+  @include class('text-right', 't-ri') { text-align: right; }
+  @include class('text-middle', 't-mid') { vertical-align: middle; }
 
-  @include tb-class('bold', 'b') { font-weight: bold; }
-  @include tb-class('italic', 'i') { font-style: italic; }
-  @include tb-class('underlined', 'un') { text-decoration: underline; }
-  @include tb-class('line-through', 'li-t') { text-decoration: line-through; }
-  @include tb-class('uppercase', 'up') { text-transform: uppercase; }
-  @include tb-class('lowercase', 'low') { text-transform: lowercase; }
-  @include tb-class('capitalize', 'cap')  { text-transform: capitalize; }
-  @include tb-class('small-caps', 'sm-cap') { text-variant: small-caps; }
+  @include class('bold', 'b') { font-weight: bold; }
+  @include class('italic', 'i') { font-style: italic; }
+  @include class('underlined', 'un') { text-decoration: underline; }
+  @include class('line-through', 'li-t') { text-decoration: line-through; }
+  @include class('uppercase', 'up') { text-transform: uppercase; }
+  @include class('lowercase', 'low') { text-transform: lowercase; }
+  @include class('capitalize', 'cap')  { text-transform: capitalize; }
+  @include class('small-caps', 'sm-cap') { text-variant: small-caps; }
 
-
-  // Rem settings
   @if $tb-rem-friendly {
     html { font-size: 62.5%; }
     $first-font: nth($tb-font-sizes, 1);
@@ -203,7 +211,6 @@
     }
   }
 
-  // Fonts
   @each $size in $tb-font-sizes {
     @if length($size) < 1 {
       @include tb-error('Font groups need to consist of two elements. A key and a numeric value.');
@@ -212,12 +219,14 @@
     } @else {
       $key: nth($size, 1);
       $value: nth($size, 2);
-      @include tb-class('#{$key}-font', '#{$key}-f') { font-size: #{$value}px; font-size: #{$value / 10}rem; }
+      @include class('#{$key}-font', '#{$key}-f') { font-size: #{$value}px; font-size: #{$value / 10}rem; }
     }
   }
 
   // COLORS
-  // Automatically generated color classes.
+  @include class('opaque', 'op') { opacity: 1; }
+  @include class('transparent', 'tra') { opacity: 0; }
+
   @each $tb-color-group in $tb-colors {
     @if length($tb-color-group) < 1 {
       @include tb-error('Color groups need to consist of at least one element at "$tb-colors".');
@@ -231,15 +240,15 @@
       }
 
       @if $tb-background-color-classes {
-        @include tb-class('#{$tb-key}-background', '#{$tb-key}-bg') { background-color: $tb-value; }
+        @include class('#{$tb-key}-background', '#{$tb-key}-bg') { background-color: $tb-value; }
       }
 
       @if $tb-text-color-classes {
-        @include tb-class('#{$tb-key}-text', '#{tb-key}-t') { color: $tb-value; }
+        @include class('#{$tb-key}-text', '#{tb-key}-t') { color: $tb-value; }
       }
 
       @if $tb-border-color-classes {
-        @include tb-class('#{$tb-key}-borders', '#{tb-key}-b') { border-color: $tb-value; }
+        @include class('#{$tb-key}-borders', '#{tb-key}-b') { border-color: $tb-value; }
       }
     }
   }
@@ -254,11 +263,11 @@
     $val: nth($dim, 2);
 
     @include below($val) {
-      @include tb-class('#{$key}-hide', '#{$key}-h') { display: none; }
+      @include class('#{$key}-hide', '#{$key}-h') { display: none; }
     }
 
     @include above($val) {
-      @include tb-class('#{$key}-show', #{$key}-s) { display: none; }
+      @include class('#{$key}-show', #{$key}-s) { display: none; }
     }
   }
 }

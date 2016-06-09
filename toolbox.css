@@ -1,3 +1,6 @@
+.static {
+  position: static; }
+
 .relative {
   position: relative; }
 
@@ -16,6 +19,15 @@
 .block {
   display: block; }
 
+.table {
+  display: table; }
+
+.table-row {
+  display: table-row; }
+
+.table-cell {
+  display: table-cell; }
+
 .hidden {
   display: none; }
 
@@ -30,6 +42,14 @@
 
 .float-right {
   float: right; }
+
+.flip-horizontal {
+  transform: scaleX(-1);
+  filter: FlipH; }
+
+.flip-vertical {
+  transform: scaleY(-1);
+  filter: FlipV; }
 
 .clear {
   content: '';
@@ -55,6 +75,9 @@
 .horizontal-padding {
   padding-top: initial;
   padding-bottom: initial; }
+
+.border-box {
+  box-sizing: border-box; }
 
 .padding-10 {
   padding: 10px; }
@@ -160,6 +183,12 @@ body {
 .small-font {
   font-size: 12px;
   font-size: 1.2rem; }
+
+.opaque {
+  opacity: 1; }
+
+.transparent {
+  opacity: 0; }
 
 .white-background {
   background-color: #fff; }
